@@ -48,6 +48,12 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
   return section;
 };
+async function criaLista() {
+  const local = document.getElementsByClassName('items')[0];
+  const receba = await fetchProducts('computador');
+  const receba2 = receba.results;
+  receba2.forEach((p) => local.appendChild(createProductItemElement(p)));
+  }
 
 /**
  * Função que recupera o ID do produto passado como parâmetro.
@@ -72,4 +78,6 @@ const createCartItemElement = ({ id, title, price }) => {
   return li;
 };
 
-window.onload = () => { };
+window.onload = () => { 
+  criaLista();
+};

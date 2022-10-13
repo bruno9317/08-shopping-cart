@@ -15,6 +15,29 @@ if (typeof module !== 'undefined') {
     fetchProducts,
   };
 }
+// async function criaLista() {
+//   const receba = await fetchProducts('computador');
+//   const receba2 = receba.results;
+//   receba2.forEach((p) => console.log(p));
+//   }
 
-// fetchProducts()
+  // criaLista();
+// fetchProducts('computador')
+// .then((data) => console.log(data.results[0]));
+
+// const aqui = fetchProducts('computador')
+// .then((data) => data.results)
+// .then((data) => data.map((p) => p.id));
+
+// aqui
 // .then((data) => console.log(data));
+
+// async function recebas() {
+//   const receba = await fetchProducts('computador');
+//   const receba2 = await receba.results;
+//   const receba3 = await receba2.map((e) => ({ id: e.id, title: e.title, thumbnail: e.thumbnail }));
+//   return receba3;
+//   }
+
+// recebas()
+// .then((data) => data.forEach((e) => console.log(e)));
