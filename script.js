@@ -1,6 +1,8 @@
 // Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições! 
 
+// const { fetchItem } = require('./helpers/fetchItem');
+
 // Fique a vontade para modificar o código já escrito e criar suas próprias funções!
 
 /**
@@ -30,6 +32,37 @@ const createCustomElement = (element, className, innerText) => {
 };
 
 /**
+ * Função responsável por criar e retornar um item do carrinho.
+ * @param {Object} product - Objeto do produto.
+ * @param {string} product.id - ID do produto.
+ * @param {string} product.title - Título do produto.
+ * @param {string} product.price - Preço do produto.
+ * @returns {Element} Elemento de um item do carrinho.
+ */
+ const createCartItemElement = ({ id, title, price }) => {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+};
+
+async function chamaNoBotao(e) {
+  const local = document.getElementsByClassName('cart__items')[0];
+  const id = e.target.parentNode.firstChild.innerText;
+  local.appendChild(createCartItemElement(await fetchItem(id)));
+  console.log(local);
+}
+
+const createCustomBotao = (element, className, innerText) => {
+  const e = document.createElement(element);
+  e.className = className;
+  e.innerText = innerText;
+  e.addEventListener('click', chamaNoBotao);
+  return e;
+};
+
+/**
  * Função responsável por criar e retornar o elemento do produto.
  * @param {Object} product - Objeto do produto. 
  * @param {string} product.id - ID do produto.
@@ -44,7 +77,7 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   section.appendChild(createCustomElement('span', 'item_id', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(createCustomBotao('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
 };
@@ -56,21 +89,37 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
  */
 const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
 
-/**
- * Função responsável por criar e retornar um item do carrinho.
- * @param {Object} product - Objeto do produto.
- * @param {string} product.id - ID do produto.
- * @param {string} product.title - Título do produto.
- * @param {string} product.price - Preço do produto.
- * @returns {Element} Elemento de um item do carrinho.
- */
-const createCartItemElement = ({ id, title, price }) => {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-};
+// /**
+//  * Função responsável por criar e retornar um item do carrinho.
+//  * @param {Object} product - Objeto do produto.
+//  * @param {string} product.id - ID do produto.
+//  * @param {string} product.title - Título do produto.
+//  * @param {string} product.price - Preço do produto.
+//  * @returns {Element} Elemento de um item do carrinho.
+//  */
+// const createCartItemElement = ({ id, title, price }) => {
+//   const li = document.createElement('li');
+//   li.className = 'cart__item';
+//   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
+//   li.addEventListener('click', cartItemClickListener);
+//   return li;
+// };
+
+// function chamaNoBotao() {
+//   console.log('oi');
+// }
+
+// function itensViraBotao() {
+//   const containerDeItens = document.getElementsByClassName('items')[0];
+//   const listaDeItens = document.querySelectorAll('.item__add');
+//   console.log(containerDeItens);
+//   console.log(listaDeItens);
+//   console.log(listaDeItens.length);
+//   // containerDeItens.addEventListener('click', chamaNoBotao);
+//   // for (let index = 0; index < 49; index += 1) {
+//   //   listaDeItens[index].addEventListener('click', chamaNoBotao);
+//   // }
+// }
 
 async function criaLista() {
   const local = document.getElementsByClassName('items')[0];
@@ -81,4 +130,5 @@ async function criaLista() {
 
 window.onload = () => { 
   criaLista();
+  // itensViraBotao();
 };
