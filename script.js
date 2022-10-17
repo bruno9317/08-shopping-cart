@@ -106,11 +106,18 @@ async function criaLista() {
   receba2.forEach((p) => local.appendChild(createProductItemElement(p)));
 }
 
-function salvaAoCarregar() {
+async function salvaAoCarregar() {
     const local = document.getElementsByClassName('cart__items')[0];
     const id = JSON.parse(getSavedCartItems());
-    // id.forEach((p) => console.log(p));
-    id.forEach(async (p) => local.appendChild(createCartItemElement(await fetchItem(p))));
+    // console.log(id);
+    if (id !== null) {
+      id.forEach(async (p) => local.appendChild(createCartItemElement(await fetchItem(p))));
+    }
+    // await Promise.all(promises);
+    // for (let index = 0; index < id.length; index += 1) {
+    //   console.log('entrou');
+    //   local.appendChild(createCartItemElement(await fetchItem()));
+    // }
 }
 
 window.onload = () => { 
