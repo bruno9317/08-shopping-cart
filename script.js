@@ -1,10 +1,3 @@
-// Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
-// experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições! 
-
-// const { fetchItem } = require('./helpers/fetchItem');
-
-// Fique a vontade para modificar o código já escrito e criar suas próprias funções!
-
 /**
  * Função responsável por criar e retornar o elemento de imagem do produto.
  * @param {string} imageSource - URL da imagem.
@@ -42,13 +35,18 @@ const createCustomElement = (element, className, innerText) => {
 
 function cartItemClickListener(e) {
   const item = e.target;
+  console.log('entrei');
   item.parentNode.removeChild(item);
+  const salvar = JSON.parse(getSavedCartItems());
+  saveCartItems(JSON.stringify(salvar.filter((p) => p !== item.id)));
+  // JSON.stringify(saveCartItems(salvar.filter((p) => p !== item.id)));
 }
 
  const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
+  li.id = id;
   li.addEventListener('click', cartItemClickListener);
   return li;
 };
@@ -57,7 +55,12 @@ async function chamaNoBotao(e) {
   const local = document.getElementsByClassName('cart__items')[0];
   const id = e.target.parentNode.firstChild.innerText;
   local.appendChild(createCartItemElement(await fetchItem(id)));
-  // console.log(local);
+  const salvar = JSON.parse(getSavedCartItems());
+  if (salvar === null) {
+    saveCartItems(JSON.stringify([id]));
+  } else {
+    saveCartItems(JSON.stringify([...salvar, id]));
+  }
 }
 
 const createCustomBotao = (element, className, innerText) => {
@@ -79,6 +82,7 @@ const createCustomBotao = (element, className, innerText) => {
 const createProductItemElement = ({ id, title, thumbnail }) => {
   const section = document.createElement('section');
   section.className = 'item';
+  section.id = id;
 
   section.appendChild(createCustomElement('span', 'item_id', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
@@ -100,9 +104,16 @@ async function criaLista() {
   const receba = await fetchProducts('computador');
   const receba2 = receba.results;
   receba2.forEach((p) => local.appendChild(createProductItemElement(p)));
-  }
+}
+
+function salvaAoCarregar() {
+    const local = document.getElementsByClassName('cart__items')[0];
+    const id = JSON.parse(getSavedCartItems());
+    // id.forEach((p) => console.log(p));
+    id.forEach(async (p) => local.appendChild(createCartItemElement(await fetchItem(p))));
+}
 
 window.onload = () => { 
   criaLista();
-  // itensViraBotao();
+  salvaAoCarregar();
 };
