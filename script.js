@@ -9,7 +9,7 @@
   img.src = imageSource;
   return img;
 };
-
+const elementoPrice = document.getElementsByClassName('total-price')[0];
 /**
  * Função responsável por criar e retornar qualquer elemento.
  * @param {string} element - Nome do elemento a ser criado.
@@ -32,16 +32,19 @@ const createCustomElement = (element, className, innerText) => {
  * @param {string} product.price - Preço do produto.
  * @returns {Element} Elemento de um item do carrinho.
  */
-
-function cartItemClickListener(e) {
+let totalPrice = 0;
+async function cartItemClickListener(e) {
   const item = e.target;
   console.log('entrei');
   item.parentNode.removeChild(item);
   const salvar = JSON.parse(getSavedCartItems());
   saveCartItems(JSON.stringify(salvar.filter((p) => p !== item.id)));
-  // JSON.stringify(saveCartItems(salvar.filter((p) => p !== item.id)));
+  const receba = await fetchItem(item.id);
+  const preço = receba.price;
+  totalPrice -= preço;
+  elementoPrice.innerText = `Total: ${totalPrice}`;
+  console.log(totalPrice);
 }
-
  const createCartItemElement = ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -61,6 +64,10 @@ async function chamaNoBotao(e) {
   } else {
     saveCartItems(JSON.stringify([...salvar, id]));
   }
+  const receba = await fetchItem(id);
+  const preço = receba.price;
+  totalPrice += preço;
+  elementoPrice.innerText = `Total: ${totalPrice}`;
 }
 
 const createCustomBotao = (element, className, innerText) => {
