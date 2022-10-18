@@ -3,7 +3,7 @@
  * @param {string} imageSource - URL da imagem.
  * @returns {Element} Elemento de imagem do produto.
  */
-const createProductImageElement = (imageSource) => {
+ const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
@@ -109,18 +109,26 @@ async function criaLista() {
 async function salvaAoCarregar() {
     const local = document.getElementsByClassName('cart__items')[0];
     const id = JSON.parse(getSavedCartItems());
-    // console.log(id);
     if (id !== null) {
       id.forEach(async (p) => local.appendChild(createCartItemElement(await fetchItem(p))));
     }
-    // await Promise.all(promises);
-    // for (let index = 0; index < id.length; index += 1) {
-    //   console.log('entrou');
-    //   local.appendChild(createCartItemElement(await fetchItem()));
-    // }
+}
+
+function eventoEsvaziar() {
+  const lista = document.getElementsByClassName('cart__item');
+  for (let index = lista.length - 1; index >= 0; index -= 1) {
+    lista[index].remove();
+  }
+  saveCartItems(JSON.stringify([]));
+}
+
+function botaoCarrinho() {
+  const botao = document.getElementsByClassName('empty-cart')[0];
+  botao.addEventListener('click', eventoEsvaziar);
 }
 
 window.onload = () => { 
   criaLista();
   salvaAoCarregar();
+  botaoCarrinho();
 };
